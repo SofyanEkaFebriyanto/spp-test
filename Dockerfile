@@ -20,26 +20,17 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 # Set working directory
 WORKDIR /app
 
-# Copy composer files first (for caching)
-COPY composer.json composer.lock ./
-RUN composer install --no-dev --optimize-autoloader --no-scripts --no-interaction
-
-# Copy package files and build frontend
-COPY package.json package-lock.json ./
-RUN npm install
-COPY vite.config.js ./
-COPY resources ./resources
-RUN npm run build
-
-# Copy rest of the application
+# Copy everything first
 COPY . .
 
-# Re-run composer scripts after full copy
-RUN composer dump-autoload --optimize
+# Install PHP dependencies
+RUN composer install --no-dev --optimize-autoloader --no-scripts --no-interaction
+
+# Install Node dependencies and build frontend
+RUN npm install && npm run build
 
 # Set proper permissions for storage and cache
-RUN chmod -R 775 storage bootstrap/cache \
-    && chown -R www-data:www-data storage bootstrap/cache
+RUN chmod -R 775 storage bootstrap/cache
 
 # Expose port
 EXPOSE ${PORT:-8080}
