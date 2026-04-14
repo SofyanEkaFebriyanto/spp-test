@@ -48,10 +48,7 @@
             </button>
         </form>
 
-        <!-- Footer Link -->
-        <p class="mt-8 text-black text-sm">
-            Belum memiliki akun? <a href="#" class="text-[#0D9488] font-semibold hover:underline">klik disini</a>
-        </p>
+
     </div>
 
 </body>

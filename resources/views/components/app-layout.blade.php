@@ -24,10 +24,6 @@
             </a>
 
             @if(Auth::check() && (Auth::user()->role === 'admin' || Auth::user()->role === 'petugas'))
-            <a href="{{ route('siswa.index') }}" class="flex items-center px-4 py-3 rounded-xl transition-all {{ request()->routeIs('siswa.*') ? 'bg-white/20 font-semibold text-white' : 'text-blue-100 hover:bg-white/10 hover:text-white' }}">
-                <svg class="w-5 h-5 mr-3 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
-                Siswa
-            </a>
             <a href="{{ route('pembayaran.index') }}" class="flex items-center px-4 py-3 rounded-xl transition-all {{ request()->routeIs('pembayaran.*') ? 'bg-white/20 font-semibold text-white' : 'text-blue-100 hover:bg-white/10 hover:text-white' }}">
                 <svg class="w-5 h-5 mr-3 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path></svg>
                 Pembayaran
@@ -35,13 +31,17 @@
             @endif
 
             @if(Auth::check() && Auth::user()->role === 'admin')
+            <a href="{{ route('siswa.index') }}" class="flex items-center px-4 py-3 rounded-xl transition-all {{ request()->routeIs('siswa.*') ? 'bg-white/20 font-semibold text-white' : 'text-blue-100 hover:bg-white/10 hover:text-white' }}">
+                <svg class="w-5 h-5 mr-3 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+                Data Siswa
+            </a>
             <a href="{{ route('kelas.index') }}" class="flex items-center px-4 py-3 rounded-xl transition-all {{ request()->routeIs('kelas.*') ? 'bg-white/20 font-semibold text-white' : 'text-blue-100 hover:bg-white/10 hover:text-white' }}">
                 <svg class="w-5 h-5 mr-3 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg>
-                Kelas
+                Data Kelas
             </a>
             <a href="{{ route('spp.index') }}" class="flex items-center px-4 py-3 rounded-xl transition-all {{ request()->routeIs('spp.*') ? 'bg-white/20 font-semibold text-white' : 'text-blue-100 hover:bg-white/10 hover:text-white' }}">
                 <svg class="w-5 h-5 mr-3 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path></svg>
-                SPP Data
+                Data SPP
             </a>
             <a href="{{ route('user.index') }}" class="flex items-center px-4 py-3 rounded-xl transition-all {{ request()->routeIs('user.*') ? 'bg-white/20 font-semibold text-white' : 'text-blue-100 hover:bg-white/10 hover:text-white' }}">
                 <svg class="w-5 h-5 mr-3 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
@@ -66,39 +66,20 @@
         
         <!-- Top Navbar -->
         <header class="h-20 bg-white flex items-center px-8 border-b border-gray-200 z-0">
-            <!-- Left: Search -->
-            <div class="flex items-center w-72">
-                <div class="relative w-full">
-                    <div class="absolute inset-y-0 left-0 flex items-center pl-4 pointer-events-none">
-                        <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
-                    </div>
-                    <input type="text" class="bg-[#F8F9FA] border-0 text-gray-900 text-sm rounded-full focus:ring-2 focus:ring-[#4A6CF7] block w-full pl-11 py-2.5" placeholder="Pencarian...">
-                </div>
-            </div>
-
-            <!-- Center: School Name -->
-            <div class="hidden md:block text-center flex-1 mx-4">
+            <!-- Left: School Name -->
+            <div class="flex-1">
                 <p class="font-bold text-gray-800 text-xl tracking-tight">SMK NEGERI 7 BALEENDAH</p>
                 <p class="text-sm text-gray-500 font-medium">Tahun Pelajaran 2025/2026</p>
             </div>
 
-            <!-- Right: Profile -->
-            <div class="flex items-center space-x-6 justify-end w-72">
-                <!-- Notification Bell -->
-                <button class="relative text-gray-400 hover:text-gray-600 transition-colors">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path></svg>
-                    <span class="absolute top-0 right-0 block h-2.5 w-2.5 rounded-full bg-red-500 ring-2 ring-white"></span>
-                </button>
-
-                <!-- Avatar & Name -->
-                <div class="flex items-center space-x-3 border-l border-gray-200 pl-6">
-                    <div class="w-10 h-10 rounded-full bg-[#4A6CF7] text-white flex items-center justify-center font-bold text-lg shadow-sm">
-                        {{ strtoupper(substr(Auth::user()->name ?? 'A', 0, 1)) }}
-                    </div>
-                    <div class="text-sm hidden lg:block text-left">
-                        <p class="font-bold text-gray-800">{{ Auth::user()->name ?? 'Admin' }}</p>
-                        <p class="text-xs text-gray-500 font-medium capitalize">{{ Auth::user()->role ?? 'Administrator' }}</p>
-                    </div>
+            <!-- Right: Avatar & Name -->
+            <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 rounded-full bg-[#4A6CF7] text-white flex items-center justify-center font-bold text-lg shadow-sm">
+                    {{ strtoupper(substr(Auth::user()->name ?? 'A', 0, 1)) }}
+                </div>
+                <div class="text-sm hidden lg:block text-left">
+                    <p class="font-bold text-gray-800">{{ Auth::user()->name ?? 'Admin' }}</p>
+                    <p class="text-xs text-gray-500 font-medium capitalize">{{ Auth::user()->role ?? 'Administrator' }}</p>
                 </div>
             </div>
         </header>

@@ -10,17 +10,15 @@
                 <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
                     <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
                 </div>
-                <input type="text" class="bg-white border border-gray-200 text-gray-900 text-sm rounded-lg focus:ring-2 focus:ring-[#4A6CF7] focus:border-transparent block w-64 pl-10 p-2.5 shadow-sm" placeholder="Cari Transaksi....">
+                <input type="text" id="search-pembayaran" oninput="searchTable(this.value, 'table-pembayaran')" class="bg-white border border-gray-200 text-gray-900 text-sm rounded-lg focus:ring-2 focus:ring-[#4A6CF7] focus:border-transparent block w-64 pl-10 p-2.5 shadow-sm" placeholder="Cari Transaksi....">
             </div>
             
-            <button class="bg-[#10B981] hover:bg-[#059669] text-white px-4 py-2.5 rounded-lg shadow-sm flex items-center font-medium transition-colors">
-                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"></path></svg>
-                Filter
-            </button>
+            @if(Auth::user()->role === 'admin')
             <a href="{{ route('pembayaran.laporan') }}" target="_blank" class="bg-[#10B981] hover:bg-[#059669] text-white px-5 py-2.5 rounded-lg shadow-sm flex items-center font-semibold transition-colors">
                 <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path></svg>
                 Cetak Laporan
             </a>
+            @endif
             <button onclick="document.getElementById('modal-add').classList.remove('hidden')" class="bg-[#4A6CF7] hover:bg-[#3451b2] text-white px-5 py-2.5 rounded-lg shadow-sm flex items-center font-semibold transition-colors">
                 <svg class="w-5 h-5 mr-2 -ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg>
                 Entry Baru
@@ -47,7 +45,7 @@
 
     <!-- Data Table -->
     <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-        <table class="w-full text-left border-collapse">
+        <table id="table-pembayaran" class="w-full text-left border-collapse">
             <thead>
                 <tr class="bg-gray-50 border-b border-gray-100 text-gray-600 text-sm uppercase tracking-wider">
                     <th class="p-4 font-semibold">Tanggal</th>
@@ -241,6 +239,16 @@
             document.getElementById('edit-tahun').value = tahun;
             document.getElementById('form-edit').action = '/pembayaran/' + id;
             document.getElementById('modal-edit').classList.remove('hidden');
+        }
+
+        function searchTable(query, tableId) {
+            const table = document.getElementById(tableId);
+            const rows = table.querySelectorAll('tbody tr');
+            const q = query.toLowerCase();
+            rows.forEach(row => {
+                const text = row.textContent.toLowerCase();
+                row.style.display = text.includes(q) ? '' : 'none';
+            });
         }
     </script>
     @endpush

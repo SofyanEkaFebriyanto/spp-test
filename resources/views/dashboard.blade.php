@@ -51,14 +51,44 @@
         </div>
     </div>
 
-    <!-- Main Table Area Placeholder -->
-    <div class="bg-white rounded-2xl shadow-sm border border-gray-100">
+    <!-- Pembayaran Terbaru Table -->
+    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
         <div class="p-6 border-b border-gray-100 flex items-center justify-between">
             <h2 class="text-lg font-bold text-gray-800">Pembayaran Terbaru</h2>
-            <button class="text-[#4A6CF7] font-semibold text-sm hover:underline">Lihat Semua</button>
+            <a href="{{ route('pembayaran.index') }}" class="text-[#4A6CF7] font-semibold text-sm hover:underline">Lihat Semua →</a>
         </div>
-        <div class="p-8 text-center text-gray-500">
-            [ Area tabel pembayaran bulan ini akan ditampilkan di sini ]
-        </div>
+        <table class="w-full text-left border-collapse">
+            <thead>
+                <tr class="bg-gray-50 border-b border-gray-100 text-gray-600 text-sm uppercase tracking-wider">
+                    <th class="p-4 font-semibold">Tanggal</th>
+                    <th class="p-4 font-semibold">Siswa</th>
+                    <th class="p-4 font-semibold">Untuk Bulan</th>
+                    <th class="p-4 font-semibold">Nominal</th>
+                    <th class="p-4 font-semibold">Petugas</th>
+                </tr>
+            </thead>
+            <tbody class="text-gray-700 divide-y divide-gray-100">
+                @forelse($recentPembayarans as $pembayaran)
+                <tr class="hover:bg-gray-50 transition-colors">
+                    <td class="p-4 font-medium">{{ \Carbon\Carbon::parse($pembayaran->tgl_bayar)->format('d M Y') }}</td>
+                    <td class="p-4">
+                        <p class="font-medium text-gray-900">{{ $pembayaran->siswa->nama ?? 'Siswa Terhapus' }}</p>
+                        <p class="text-xs text-gray-500">NISN: {{ $pembayaran->nisn }}</p>
+                    </td>
+                    <td class="p-4">
+                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                            {{ $pembayaran->bulan_dibayar }} {{ $pembayaran->tahun_dibayar }}
+                        </span>
+                    </td>
+                    <td class="p-4 font-semibold text-gray-900">Rp {{ number_format($pembayaran->jumlah_bayar, 0, ',', '.') }}</td>
+                    <td class="p-4 text-sm text-gray-500">{{ $pembayaran->petugas->name ?? 'N/A' }}</td>
+                </tr>
+                @empty
+                <tr>
+                    <td colspan="5" class="p-8 text-center text-gray-500">Belum ada transaksi pembayaran.</td>
+                </tr>
+                @endforelse
+            </tbody>
+        </table>
     </div>
 </x-app-layout>

@@ -1,6 +1,11 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\SppController;
+use App\Http\Controllers\KelasController;
+use App\Http\Controllers\SiswaController;
+use App\Http\Controllers\PembayaranController;
+use App\Http\Controllers\UserController;
 
 Route::get('/', function () {
     return redirect('/login');
@@ -9,12 +14,6 @@ Route::get('/', function () {
 Route::get('/login', [AuthController::class, 'login'])->name('login');
 Route::post('/login', [AuthController::class, 'authenticate']);
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
-
-use App\Http\Controllers\SppController;
-use App\Http\Controllers\KelasController;
-use App\Http\Controllers\SiswaController;
-use App\Http\Controllers\PembayaranController;
-use App\Http\Controllers\UserController;
 
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard', function () {
@@ -28,20 +27,21 @@ Route::middleware('auth')->group(function () {
         $totalKelas = \App\Models\Kelas::count();
         $totalPetugas = \App\Models\User::whereIn('role', ['admin', 'petugas'])->count();
         $totalTransaksi = \App\Models\Pembayaran::count();
-        return view('dashboard', compact('totalSiswa', 'totalKelas', 'totalPetugas', 'totalTransaksi'));
+        $recentPembayarans = \App\Models\Pembayaran::with(['petugas', 'siswa', 'spp'])->orderBy('created_at', 'desc')->take(5)->get();
+        return view('dashboard', compact('totalSiswa', 'totalKelas', 'totalPetugas', 'totalTransaksi', 'recentPembayarans'));
     })->name('dashboard');
 
-    // Admin Only
+    // Admin Only — CRUD Siswa, Kelas, SPP, Petugas, Laporan
     Route::middleware('role:admin')->group(function () {
         Route::resource('user', UserController::class)->except(['create', 'show', 'edit']);
         Route::resource('kelas', KelasController::class)->except(['create', 'show', 'edit']);
         Route::resource('spp', SppController::class)->except(['create', 'show', 'edit']);
+        Route::resource('siswa', SiswaController::class)->except(['create', 'show', 'edit']);
+        Route::get('/pembayaran/laporan', [PembayaranController::class, 'laporan'])->name('pembayaran.laporan');
     });
 
-    // Admin & Petugas
+    // Admin & Petugas — Entri transaksi pembayaran
     Route::middleware('role:admin,petugas')->group(function () {
-        Route::get('/pembayaran/laporan', [PembayaranController::class, 'laporan'])->name('pembayaran.laporan');
-        Route::resource('siswa', SiswaController::class)->except(['create', 'show', 'edit']);
-        Route::resource('pembayaran', PembayaranController::class)->except(['create', 'edit']);
+        Route::resource('pembayaran', PembayaranController::class)->except(['create', 'show', 'edit']);
     });
 });

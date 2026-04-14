@@ -44,10 +44,7 @@ class PembayaranController extends Controller
         return redirect()->route('pembayaran.index')->with('success', 'Transaksi pembayaran berhasil diproses.');
     }
 
-    public function show(Pembayaran $pembayaran)
-    {
-        return view('pembayaran.show', compact('pembayaran'));
-    }
+
 
     public function update(Request $request, Pembayaran $pembayaran)
     {

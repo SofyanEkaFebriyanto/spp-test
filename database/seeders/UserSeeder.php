@@ -12,18 +12,22 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
-        \App\Models\User::create([
-            'name' => 'Administrator',
-            'email' => 'admin@gmail.com',
-            'password' => \Illuminate\Support\Facades\Hash::make('password'),
-            'role' => 'admin',
-        ]);
+        \App\Models\User::firstOrCreate(
+            ['username' => 'admin'],
+            [
+                'name' => 'Administrator',
+                'password' => 'password',
+                'role' => 'admin',
+            ]
+        );
 
-        \App\Models\User::create([
-            'name' => 'Petugas SPP',
-            'email' => 'petugas@gmail.com',
-            'password' => \Illuminate\Support\Facades\Hash::make('password'),
-            'role' => 'petugas',
-        ]);
+        \App\Models\User::firstOrCreate(
+            ['username' => 'petugas'],
+            [
+                'name' => 'Petugas SPP',
+                'password' => 'password',
+                'role' => 'petugas',
+            ]
+        );
     }
 }
