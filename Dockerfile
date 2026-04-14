@@ -34,16 +34,20 @@ RUN npm run build
 # Copy rest of the application
 COPY . .
 
-# Re-run composer dump-autoload after full copy
+# Re-run composer scripts after full copy
 RUN composer dump-autoload --optimize
 
-# Cache Laravel config, routes, views
-RUN php artisan config:cache || true
-RUN php artisan route:cache || true
-RUN php artisan view:cache || true
+# Set proper permissions for storage and cache
+RUN chmod -R 775 storage bootstrap/cache \
+    && chown -R www-data:www-data storage bootstrap/cache
 
 # Expose port
 EXPOSE ${PORT:-8080}
 
-# Start command: migrate, seed, then serve
-CMD php artisan migrate --force && php artisan db:seed --force && php artisan serve --host=0.0.0.0 --port=${PORT:-8080}
+# Start: cache config at runtime (when env vars are available), then migrate, seed, serve
+CMD php artisan config:cache \
+    && php artisan route:cache \
+    && php artisan view:cache \
+    && php artisan migrate --force \
+    && php artisan db:seed --force \
+    && php artisan serve --host=0.0.0.0 --port=${PORT:-8080}
